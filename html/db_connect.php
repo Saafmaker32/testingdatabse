@@ -1,17 +1,14 @@
 <?php
 function getDBConnection() {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "my_base";
+    $servername = getenv("MYSQLHOST") ?: "testingdatabse.railway.internal";
+    $username = getenv("MYSQLUSER") ?: "root";
+    $password = getenv("MYSQLPASSWORD") ?: "SLYTuCAeKQYXJwsRhtzsTKhhdRtkmjfY";
+    $dbname = getenv("MYSQLDATABASE") ?: "railway";
 
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     if ($conn->connect_error) {
-        // Log fout op server, toon geen gevoelige info aan gebruiker
-        error_log("Database connection failed: " . $conn->connect_error);
-        http_response_code(500);
-        exit("Databasefout. Probeer het later opnieuw.");
+        die("Connection failed: " . $conn->connect_error);
     }
 
     return $conn;
